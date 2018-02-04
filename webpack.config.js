@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 module.exports = {
   entry: [
     './src/index.js'
@@ -19,8 +20,21 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
+  devtool: 'sourcemap',
   devServer: {
     historyApiFallback: true,
-    contentBase: './'
-  }
+    contentBase: './',
+    proxy: {
+      '/review': {
+        target: 'https://www.goodreads.com/',
+        changeOrigin: true,
+      }
+    }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      '__API_KEY__': JSON.stringify(process.env.GOODREADS_API_KEY),
+    })
+  ],
 };

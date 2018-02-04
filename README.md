@@ -23,3 +23,14 @@ Click [here](https://github.com/StephenGrider/ReactStarter/releases) then downlo
 > npm install
 > npm start
 ```
+
+
+### TODO:
+
+1. Create page with list of all books
+2. Create book details page for a specific book
+3. Add pagination to main book list page
+4. Add sorting to book list page
+  a. By author
+  b. By rating
+  c. By published date
