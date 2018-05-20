@@ -5,17 +5,18 @@ import { map, ceil, parseInt } from 'lodash';
 import { Link } from 'react-router-dom'
 import queryString from 'query-string';
 import { SORT } from '../actions';
+import Pagination from "./pagination";
 
 class BookList extends Component {
 
   componentDidMount() {
-    const sort = sortQuery(this.props.location.search)
+    const sort = this.sortQuery(this.props.location.search)
     this.props.fetchBooks(this.props.match.params.pageNumber, sort);
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentSort = sortQuery(this.props.location.search)
-    const nextSort = sortQuery(nextProps.location.search)
+    const currentSort = this.sortQuery(this.props.location.search)
+    const nextSort = this.sortQuery(nextProps.location.search)
     if(
       nextProps.match.params
       && this.props.match.params
@@ -55,29 +56,17 @@ class BookList extends Component {
   render() {
 
     const { match: { params: { pageNumber } }, booksTotal } = this.props;
-
+    const currentSort = this.sortQuery(this.props.location.search)
     const intPageNumber = parseInt(pageNumber);
-    const previousPageNumber = intPageNumber == 1 ? null : intPageNumber - 1
-    const nextPageNumber = intPageNumber == ceil(booksTotal / 10) ? null : intPageNumber + 1
-
-    const currentSort = sortQuery(this.props.location.search)
 
     return (
       <div>
         <div>
-          { previousPageNumber ?
-            <Link to={`/${previousPageNumber}?sort=${currentSort}`}>
-              Previous Page
-            </Link>
-            : <span>Previous Page</span>
-          }
-          { `Page ${intPageNumber}` }
-          { nextPageNumber ?
-            <Link to={`/${nextPageNumber}?sort=${currentSort}`}>
-              Next Page
-            </Link>
-            : <span>Next Page</span>
-          }
+          <Pagination
+            currentPage={intPageNumber}
+            booksTotal={parseInt(booksTotal)}
+            currentSort={currentSort}
+          />
         </div>
         <div>
           <Link to={`/${intPageNumber}?sort=${SORT.AUTHOR}`}>
