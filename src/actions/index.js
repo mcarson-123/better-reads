@@ -9,7 +9,7 @@ const URL = `/review/list?v=2&id=6754163&shelf=on-cloud&key=${__API_KEY__}&per_p
 // by the Goodreads API
 export const SORT = {
   AUTHOR: 'author',
-  RATING: 'rating',
+  RATING: 'avg_rating',
   DATE_PUB: 'date_pub',
 };
 

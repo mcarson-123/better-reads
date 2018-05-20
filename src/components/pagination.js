@@ -54,9 +54,12 @@ const Pagination = (
         {
           map(pagesToShow, (page, i) => {
             return (
-              <span>
+              <span key={i}>
                 { i != 0 && seprator(pagesToShow[i-1], page) }
-                <Link to={`/${page}?sort=${currentSort}`}>{page}</Link>
+                {
+                  page == currentPage ?
+                    page : <Link to={`/${page}?sort=${currentSort}`}>{page}</Link>
+                }
               </span>
             );
           })
