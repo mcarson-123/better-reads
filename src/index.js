@@ -22,7 +22,7 @@ ReactDOM.render(
     <BrowserRouter>
       <div>
         <Switch>
-          <Route path="/" component={BookList} />
+          <Route path="/:pageNumber" component={BookList} />
         </Switch>
       </div>
     </BrowserRouter>

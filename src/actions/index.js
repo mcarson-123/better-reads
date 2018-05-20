@@ -6,6 +6,7 @@ import moment from 'moment';
 const URL = `/review/list?v=2&id=6754163&shelf=on-cloud&key=${__API_KEY__}&per_page=10`
 
 export const BOOKS_FETCHED = 'books_fetched';
+export const BOOKS_TOTAL_FETCHED = 'books_total_fetched';
 
 /*
   Sadly XML is a pain to parse. I couldn't find any great libraries to
@@ -39,8 +40,8 @@ function parseXML(xmlString) {
 */
 function extrapolateDataFromXml(xmlObj) {
   // This extrapolation is very ugly :sadpanda:
+  const total = xmlObj.GoodreadsResponse.reviews[0].$.total;
   const reviews = xmlObj.GoodreadsResponse.reviews[0].review;
-  console.log("REVIEWS", reviews);
 
   const objForState = {}
   each(reviews, function(review) {
@@ -59,7 +60,7 @@ function extrapolateDataFromXml(xmlObj) {
       authors: formatAuthorsFromXML(bookData.authors)
     }
   });
-  return objForState;
+  return [total, objForState];
 }
 
 function getDayFromParts(day, month, year) {
@@ -77,22 +78,29 @@ function formatAuthorsFromXML(authorsXML) {
   return authors;
 }
 
-/*
-  Used for testing xml parsing without having to hit the api every time.
-*/
-// export function fetchBooks() {
+// /*
+//   Used for testing xml parsing without having to hit the api every time.
+// */
+// export function fetchBooks(pageNumber = 1) {
 //   return (dispatch) => {
 //     parseXML(bookXML)
-//     .then((books) => console.log(books) || dispatch(fetchBooksSuccess(books)));
+//     .then(parsedData => {
+//       dispatch(fetchBooksSuccess(parsedData[1]));
+//       dispatch(fetchBooksTotalSuccess(parsedData[0]));
+//     });
 //   }
 // }
 
-export function fetchBooks() {
+export function fetchBooks(pageNumber = 1) {
+  const queryURL = `${URL}&page=${pageNumber}`
   return (dispatch) => {
     var books = [];
-    axios.get(URL)
+    axios.get(queryURL)
       .then((res) => parseXML(res.data))
-      .then((books) => console.log(books) || dispatch(fetchBooksSuccess(books)));
+      .then((parsedData) => {
+        dispatch(fetchBooksSuccess(parsedData[1]));
+        dispatch(fetchBooksTotalSuccess(parsedData[0]));
+      });
   }
 }
 
@@ -100,6 +108,13 @@ function fetchBooksSuccess(books){
   return {
     type: BOOKS_FETCHED,
     payload: books,
+  }
+}
+
+function fetchBooksTotalSuccess(booksTotal){
+  return {
+    type: BOOKS_TOTAL_FETCHED,
+    payload: booksTotal,
   }
 }
 
