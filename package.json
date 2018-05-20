@@ -37,6 +37,7 @@
     "redux": "^3.0.4",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.2.0",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.19",
+    "query-string": "^6"
   }
 }
