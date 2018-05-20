@@ -5,6 +5,14 @@ import moment from 'moment';
 
 const URL = `/review/list?v=2&id=6754163&shelf=on-cloud&key=${__API_KEY__}&per_page=10`
 
+// The values are the sort parameter values expected
+// by the Goodreads API
+export const SORT = {
+  AUTHOR: 'author',
+  RATING: 'rating',
+  DATE_PUB: 'date_pub',
+};
+
 export const BOOKS_FETCHED = 'books_fetched';
 export const BOOKS_TOTAL_FETCHED = 'books_total_fetched';
 
@@ -91,8 +99,8 @@ function formatAuthorsFromXML(authorsXML) {
 //   }
 // }
 
-export function fetchBooks(pageNumber = 1) {
-  const queryURL = `${URL}&page=${pageNumber}`
+export function fetchBooks(pageNumber = 1, sort = SORT.AUTHOR) {
+  const queryURL = `${URL}&page=${pageNumber}&sort=${sort}`
   return (dispatch) => {
     var books = [];
     axios.get(queryURL)

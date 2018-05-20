@@ -3,20 +3,28 @@ import { connect } from 'react-redux';
 import { fetchBooks, setPage } from '../actions';
 import { map, ceil, parseInt } from 'lodash';
 import { Link } from 'react-router-dom'
+import queryString from 'query-string';
+import { SORT } from '../actions';
 
 class BookList extends Component {
 
   componentDidMount() {
-    this.props.fetchBooks(this.props.match.params.pageNumber);
+    const sort = sortQuery(this.props.location.search)
+    this.props.fetchBooks(this.props.match.params.pageNumber, sort);
   }
 
   componentWillReceiveProps(nextProps) {
+    const currentSort = sortQuery(this.props.location.search)
+    const nextSort = sortQuery(nextProps.location.search)
     if(
       nextProps.match.params
       && this.props.match.params
-      && nextProps.match.params.pageNumber != this.props.match.params.pageNumber
+      && (
+        nextProps.match.params.pageNumber != this.props.match.params.pageNumber
+        || currentSort != nextSort
+      )
     ) {
-      this.props.fetchBooks(nextProps.match.params.pageNumber);
+      this.props.fetchBooks(nextProps.match.params.pageNumber, nextSort);
     }
   }
 
@@ -25,7 +33,7 @@ class BookList extends Component {
     // If books haven't been loaded, nothing to map over so this is safe.
     var i = 0
     return map(books, book => {
-      i = i+1;
+      i = i + 1;
       return(this.bookDetails(book, i));
     })
   }
@@ -40,6 +48,10 @@ class BookList extends Component {
     );
   }
 
+  sortQuery(urlQueryString) {
+    return queryString.parse(urlQueryString).sort
+  }
+
   render() {
 
     const { match: { params: { pageNumber } }, booksTotal } = this.props;
@@ -48,21 +60,36 @@ class BookList extends Component {
     const previousPageNumber = intPageNumber == 1 ? null : intPageNumber - 1
     const nextPageNumber = intPageNumber == ceil(booksTotal / 10) ? null : intPageNumber + 1
 
+    const currentSort = sortQuery(this.props.location.search)
+
     return (
       <div>
-        { previousPageNumber ?
-          <Link to={`/${previousPageNumber}`}>
-            Previous Page
+        <div>
+          { previousPageNumber ?
+            <Link to={`/${previousPageNumber}?sort=${currentSort}`}>
+              Previous Page
+            </Link>
+            : <span>Previous Page</span>
+          }
+          { `Page ${intPageNumber}` }
+          { nextPageNumber ?
+            <Link to={`/${nextPageNumber}?sort=${currentSort}`}>
+              Next Page
+            </Link>
+            : <span>Next Page</span>
+          }
+        </div>
+        <div>
+          <Link to={`/${intPageNumber}?sort=${SORT.AUTHOR}`}>
+            Sort by Author
           </Link>
-          : <span>Previous Page</span>
-        }
-        { `Page ${intPageNumber}` }
-        { nextPageNumber ?
-          <Link to={`/${nextPageNumber}`}>
-            Next Page
+          <Link to={`/${intPageNumber}?sort=${SORT.RATING}`}>
+            Sort by Rating
           </Link>
-          : <span>Next Page</span>
-        }
+          <Link to={`/${intPageNumber}?sort=${SORT.DATE_PUB}`}>
+            Sort by Publication Date
+          </Link>
+        </div>
         { this.renderBooks() }
       </div>
     )
