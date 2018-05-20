@@ -5,7 +5,8 @@ import { map, ceil, parseInt } from 'lodash';
 import { Link } from 'react-router-dom'
 import queryString from 'query-string';
 import { SORT } from '../actions';
-import Pagination from "./pagination";
+import Pagination from './pagination';
+import BookListItem from './book_list_item'
 
 class BookList extends Component {
 
@@ -34,8 +35,15 @@ class BookList extends Component {
     // If books haven't been loaded, nothing to map over so this is safe.
     var i = 0
     return map(books, book => {
-      i = i + 1;
-      return(this.bookDetails(book, i));
+      i++;
+      const bookNumber = ((this.props.match.params.pageNumber - 1) * 10) + i;
+      return(
+        <BookListItem
+          key={book.id}
+          bookListId={bookNumber}
+          bookInfo={book}
+        />
+      );
     })
   }
 
@@ -45,6 +53,7 @@ class BookList extends Component {
         { ((this.props.match.params.pageNumber - 1) * 10) + number }
         <img src={book.image_url} />
         {book.title}
+        {book.average_rating}
       </div>
     );
   }
