@@ -17,12 +17,14 @@ const store = createStore(
   composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
 
+// Use query param instead
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <div>
         <Switch>
-          <Route path="/:pageNumber" component={BookList} />
+          <Route path="/" component={BookList}/>
         </Switch>
       </div>
     </BrowserRouter>

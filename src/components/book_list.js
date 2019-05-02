@@ -11,13 +11,13 @@ import BookListItem from './book_list_item'
 class BookList extends Component {
 
   componentDidMount() {
-    const sort = this.sortQuery(this.props.location.search)
+    const sort = this.sortQueryString(this.props.location.search)
     this.props.fetchBooks(this.props.match.params.pageNumber, sort);
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentSort = this.sortQuery(this.props.location.search)
-    const nextSort = this.sortQuery(nextProps.location.search)
+    const currentSort = this.sortQueryString(this.props.location.search)
+    const nextSort = this.sortQueryString(nextProps.location.search)
     if(
       nextProps.match.params
       && this.props.match.params
@@ -30,13 +30,13 @@ class BookList extends Component {
     }
   }
 
-  renderBooks() {
+  renderBooks(intPageNumber) {
     const { books } = this.props;
     // If books haven't been loaded, nothing to map over so this is safe.
     var i = 0
     return map(books, book => {
       i++;
-      const bookNumber = ((this.props.match.params.pageNumber - 1) * 10) + i;
+      const bookNumber = ((intPageNumber - 1) * 10) + i;
       return(
         <BookListItem
           key={book.id}
@@ -47,26 +47,23 @@ class BookList extends Component {
     })
   }
 
-  bookDetails(book, number) {
-    return(
-      <div key={book.id}>
-        { ((this.props.match.params.pageNumber - 1) * 10) + number }
-        <img src={book.image_url} />
-        {book.title}
-        {book.average_rating}
-      </div>
-    );
+  currentQueryString(urlQueryString) {
+    return queryString.parse(urlQueryString)
   }
 
-  sortQuery(urlQueryString) {
-    return queryString.parse(urlQueryString).sort
+  sortQueryString(urlQueryString) {
+    return this.currentQueryString(urlQueryString).sort
+  }
+
+  pageNumberQueryString(urlQueryString) {
+    return this.currentQueryString(urlQueryString).pageNumber
   }
 
   render() {
-
-    const { match: { params: { pageNumber } }, booksTotal } = this.props;
-    const currentSort = this.sortQuery(this.props.location.search)
-    const intPageNumber = parseInt(pageNumber);
+    const { booksTotal } = this.props;
+    const currentSort = this.sortQueryString(this.props.location.search)
+    const currentpageNumber = this.pageNumberQueryString(this.props.location.search)
+    const intPageNumber = parseInt(currentpageNumber);
 
     return (
       <div>
@@ -88,7 +85,7 @@ class BookList extends Component {
             Sort by Publication Date
           </Link>
         </div>
-        { this.renderBooks() }
+        { this.renderBooks(intPageNumber) }
       </div>
     )
   }
