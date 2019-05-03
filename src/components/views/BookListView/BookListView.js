@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchBooks, setPage } from '../actions';
+import { fetchBooks, setPage, SORT } from '/actions';
 import { map, ceil, parseInt } from 'lodash';
 import { Link } from 'react-router-dom'
 import queryString from 'query-string';
-import { SORT } from '../actions';
-import Pagination from './pagination';
-import BookListItem from './book_list_item'
+import Pagination from '/components/partials/Pagination';
+import BookListItem from '/components/partials/BookListItem';
 
-class BookList extends Component {
+class BookListView extends Component {
 
   componentDidMount() {
     const sort = this.sortQueryString(this.props.location.search)
@@ -91,6 +90,10 @@ class BookList extends Component {
   }
 }
 
+// TODO: Create a link coponent that takes as props
+// the page number and the sort <- use proptypes for the sort,
+// have the actual keys (SORT.<something>) in there .oneOf
+
 function mapStateToProps(state) {
   return {
     books: state.books,
@@ -104,4 +107,4 @@ export default connect(
     fetchBooks,
     setPage,
   },
-)(BookList);
+)(BookListView);

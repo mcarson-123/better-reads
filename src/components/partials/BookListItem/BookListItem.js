@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './book_list_item.css';
+
 const BookListItem = (
   {
     bookListId,
@@ -8,7 +10,7 @@ const BookListItem = (
 ) => {
 
   return(
-    <div>
+    <div className='book-list-item'>
       {bookListId}
       <img src={bookInfo.image_url} />
       {bookInfo.title}

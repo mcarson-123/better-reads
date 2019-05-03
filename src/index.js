@@ -7,24 +7,21 @@ import promise from 'redux-promise';
 import thunkMiddleware from 'redux-thunk'
 
 import reducers from './reducers';
-import BookList from './components/book_list';
+import BookListView from './components/views/BookListView';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-//<Route path="/filter/:filter" component={BookList} />
 const store = createStore(
   reducers,
   composeEnhancers(applyMiddleware(thunkMiddleware)),
 );
-
-// Use query param instead
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <div>
         <Switch>
-          <Route path="/" component={BookList}/>
+          <Route path="/" component={BookListView}/>
         </Switch>
       </div>
     </BrowserRouter>
