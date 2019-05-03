@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import './book_list_item.css';
+import { ItemContainer } from './styles.css';
 
 const BookListItem = (
   {
@@ -8,20 +9,19 @@ const BookListItem = (
     bookInfo
   }
 ) => {
-
   return(
-    <div className='book-list-item'>
+    <ItemContainer>
       {bookListId}
       <img src={bookInfo.image_url} />
       {bookInfo.title}
       {bookInfo.average_rating}
-    </div>
+    </ItemContainer>
   );
 };
 
 BookListItem.propTypes = {
-  bookListId: React.PropTypes.number.isRequired,
-  bookInfo: React.PropTypes.object.isRequired,
+  bookListId: PropTypes.number.isRequired,
+  bookInfo: PropTypes.object.isRequired,
 
 }
 

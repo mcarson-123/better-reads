@@ -21,7 +21,7 @@ ReactDOM.render(
     <BrowserRouter>
       <div>
         <Switch>
-          <Route path="/" component={BookListView}/>
+          <Route path="/" component={props => <BookListView {...props}/>}/>
         </Switch>
       </div>
     </BrowserRouter>

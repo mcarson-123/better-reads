@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ceil, map } from 'lodash';
 import { Link } from 'react-router-dom'
 
@@ -77,9 +78,9 @@ const Pagination = (
 };
 
 Pagination.propTypes = {
-  currentPage: React.PropTypes.number,
-  booksTotal: React.PropTypes.number,
-  currentSort: React.PropTypes.string
+  currentPage: PropTypes.number,
+  booksTotal: PropTypes.number,
+  currentSort: PropTypes.string
 }
 
 export default Pagination;
