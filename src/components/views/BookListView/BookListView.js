@@ -12,21 +12,26 @@ class BookListView extends Component {
 
   componentDidMount() {
     const sort = this.sortQueryString(this.props.location.search)
-    this.props.fetchBooks(this.props.match.params.pageNumber, sort);
+    const pageNumber = this.pageNumberQueryString(this.props.location.search)
+    this.props.fetchBooks(pageNumber, sort);
   }
 
   componentWillReceiveProps(nextProps) {
     const currentSort = this.sortQueryString(this.props.location.search)
     const nextSort = this.sortQueryString(nextProps.location.search)
+
+    const currentPage = this.pageNumberQueryString(this.props.location.search)
+    const nextPage = this.pageNumberQueryString(nextProps.location.search)
+
     if(
       nextProps.match.params
       && this.props.match.params
       && (
-        nextProps.match.params.pageNumber != this.props.match.params.pageNumber
+        currentPage != nextPage
         || currentSort != nextSort
       )
     ) {
-      this.props.fetchBooks(nextProps.match.params.pageNumber, nextSort);
+      this.props.fetchBooks(nextPage, nextSort);
     }
   }
 
@@ -63,7 +68,7 @@ class BookListView extends Component {
     const { booksTotal } = this.props;
     const currentSort = this.sortQueryString(this.props.location.search)
     const currentpageNumber = this.pageNumberQueryString(this.props.location.search)
-    const intPageNumber = parseInt(currentpageNumber);
+    const intPageNumber = currentpageNumber ? parseInt(currentpageNumber) : 1;
 
     return (
       <div>
