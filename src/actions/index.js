@@ -1,6 +1,7 @@
 import { parseString } from 'xml2js';
 import { each } from 'lodash';
 import moment from 'moment';
+import qs from 'qs';
 
 const URL = `http://localhost:3000`;
 
@@ -16,7 +17,12 @@ export const BOOKS_FETCHED = 'books_fetched';
 export const BOOKS_TOTAL_FETCHED = 'books_total_fetched';
 
 export function fetchBooks(pageNumber = 1, sort = SORT.AUTHOR) {
-  const queryURL = `${URL}/books`
+  const queryString = qs.stringify({
+    page: pageNumber,
+    sort: sort,
+  });
+  const queryURL = `${URL}/books?${queryString}`;
+
   return (dispatch) => {
     var books = [];
     fetch(queryURL)
