@@ -4,6 +4,7 @@ import { fetchBooks, setPage, SORT } from '/actions';
 import { map, ceil, parseInt } from 'lodash';
 import { Link } from 'react-router-dom'
 import queryString from 'query-string';
+import PageLink from '/components/base/PageLink';
 import Pagination from '/components/partials/Pagination';
 import BookListItem from '/components/partials/BookListItem';
 
@@ -74,15 +75,15 @@ class BookListView extends Component {
           />
         </div>
         <div>
-          <Link to={`/${intPageNumber}?sort=${SORT.AUTHOR}`}>
+          <PageLink page={intPageNumber} sort={SORT.AUTHOR}>
             Sort by Author
-          </Link>
-          <Link to={`/${intPageNumber}?sort=${SORT.RATING}`}>
+          </PageLink>
+          <PageLink page={intPageNumber} sort={SORT.RATING}>
             Sort by Rating
-          </Link>
-          <Link to={`/${intPageNumber}?sort=${SORT.DATE_PUB}`}>
+          </PageLink>
+          <PageLink page={intPageNumber} sort={SORT.DATE_PUB}>
             Sort by Publication Date
-          </Link>
+          </PageLink>
         </div>
         { this.renderBooks(intPageNumber) }
       </div>

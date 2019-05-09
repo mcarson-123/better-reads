@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ceil, map } from 'lodash';
 import { Link } from 'react-router-dom'
+import PageLink from '/components/base/PageLink';
 
 const Pagination = (
   {
@@ -59,7 +60,7 @@ const Pagination = (
                 { i != 0 && seprator(pagesToShow[i-1], page) }
                 {
                   page == currentPage ?
-                    page : <Link to={`/?pageNumber=${page}&sort=${currentSort}`}>{page}</Link>
+                    page : <PageLink page={page} sort={currentSort}>{page}</PageLink>
                 }
               </span>
             );
@@ -80,7 +81,12 @@ const Pagination = (
 Pagination.propTypes = {
   currentPage: PropTypes.number,
   booksTotal: PropTypes.number,
-  currentSort: PropTypes.string
+  currentSort: PropTypes.string,
+}
+
+Pagination.defaultProps = {
+  currentPage: 1,
+  booksTotal: 1,
 }
 
 export default Pagination;
